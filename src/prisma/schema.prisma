@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId      Int      @id @default(autoincrement()) @map("userId")
+  name        String   
+  email       String   @unique
+  password    String
+  description String?  @default("안녕하세요")
+  createdAt   DateTime @default(now())               @map("createdAt")
+  updatedAt   DateTime @updatedAt @default(now())    @map("updatedAt")
+  Posts       Posts[]
+  Comments    Comments[]
+  
+  @@map("Users")
+}
+
+model Posts {
+  postId    Int      @id @default(autoincrement()) @map("postId")
+  createdId Int      @map("createdId")
+  title     String
+  content   String
+  imgUrl    String   @map("imgUrl")
+  petName   String   @map("petName")
+  category  String
+  createdAt DateTime @default(now())               @map("createdAt")
+  updatedAt DateTime @updatedAt @default(now())    @map("updatedAt")
+  createdUser Users    @relation(fields: [createdId], references: [userId], onDelete:Cascade)
+  Comments  Comments[]
+
+  @@map("Posts")
+  
+}
+
+model Comments {
+  commentId Int      @id @default(autoincrement()) @map("commentId")
+  userId    Int      @map("userId")
+  postId    Int      @map("postId")
+  content   String
+  createdAt DateTime @default(now())               @map("createdAt")
+  updatedAt DateTime @updatedAt @default(now())    @map("updatedAt")
+  createdUser      Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  selectedPost      Posts    @relation(fields: [postId], references: [postId], onDelete: Cascade)
+
+  @@map("Comments")
+}

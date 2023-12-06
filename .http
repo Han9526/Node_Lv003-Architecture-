@@ -1,0 +1,94 @@
+### Sign-Up
+POST http://localhost:3018/api/signup HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "테스트17",
+  "email": "test17@naver.com",
+  "password": "12312w3",
+  "passwordRe": "123123"
+
+}
+
+
+### Sign-In
+POST http://localhost:3018/api/signin HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "test13@naver.com",
+  "password": "1231223"
+}
+
+### Sign-Out
+POST http://localhost:3018/api/signout HTTP/1.1
+Content-Type: application/json
+
+### 회원탈퇴
+DELETE http://localhost:3018/api/auth/6 HTTP/1.1
+Content-Type: application/json
+
+{
+  "password":"123123"
+}
+
+### 내정보 조회
+GET http://localhost:3018/api/auth/5 HTTP/1.1
+Content-Type: application/json
+
+### 내정보 수정
+PATCH http://localhost:3018/api/auth/5 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "테스트5수정확인",
+  "email": "test5@naver.com",
+  "password": "123123",
+  "passwordRe": "123123",
+   "description": "안녕하2요제발"
+}
+
+
+### 게시판 조회
+GET http://localhost:3018/api/posts HTTP/1.1
+Content-Type: application/json
+
+### 게시판 상세 조회
+GET http://localhost:3018/api/post/1 HTTP/1.1
+Content-Type: application/json
+
+### 게시판 카테고리별 조회
+GET http://localhost:3018/api/category/cat HTTP/1.1
+Content-Type: application/json
+
+### 게시판 작성
+POST http://localhost:3018/api/post HTTP/1.1
+Content-Type: application/json
+
+{
+      "title":"후추",
+        "content":"후추에용",
+        "imgUrl":"example.com",
+        "petName":"후추에요",
+        "category":"cat"
+}
+
+
+### 게시판 수정
+PATCH http://localhost:3018/api/post/8 HTTP/1.1
+Content-Type: application/json
+
+{
+      "title":"후추22",
+        "content":"후추에용",
+        "petName":"후추에요",
+        "category":"dog"
+}
+
+### 게시판 삭제
+DELETE http://localhost:3018/api/post/8 HTTP/1.1
+Content-Type: application/json
+
+{
+  "password":"123123"
+}
