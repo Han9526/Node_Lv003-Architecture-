@@ -1,6 +1,7 @@
 import express from "express";
 import { PostsController } from "../controllers/posts.controller.js";
 import authMiddleware from "../middlewares/need-signin.middleware.js";
+
 const router = express.Router();
 
 // PostsController의 인스턴스를 생성합니다.
@@ -23,4 +24,5 @@ router.patch("/post/:postId", authMiddleware, postsController.updatePost);
 
 /** 게시글 삭제 API **/
 router.delete("/post/:postId", authMiddleware, postsController.deletePost);
+
 export default router;
