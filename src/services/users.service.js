@@ -10,7 +10,7 @@ export class UsersService {
    usersRepository = new UsersRepository();
 
    // 회원가입
-   createUser = async (name, email, password, passwordRe, description) => {
+   createUser = async (name, email, password, description) => {
       const isExistUser = await this.usersRepository.findUserByEmail(email);
       if (isExistUser) {
          throw new Error('이미 존재하는 email 입니다');
