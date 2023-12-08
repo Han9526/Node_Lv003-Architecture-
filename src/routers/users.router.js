@@ -23,10 +23,6 @@ router.patch(
   authMiddleware,
   usersController.updateUser
 );
-// 로그아웃
-// 로그아웃에 로그를 기록하는 것이 아니라면
-// 프론트에서 쿠키 삭제하는 것이 효율적이다
-// clearcookie 테스트 하기 위해 작성
 router.post("/signout", authMiddleware, usersController.signOut);
 
 // 회원 탈퇴
