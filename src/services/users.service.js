@@ -8,29 +8,31 @@ dotenv.config();
 
 export class UsersService {
   usersRepository = new UsersRepository();
-  // 회원가입
 
+  // 회원가입
   createUser = async (name, email, password, passwordRe, description) => {
     try {
-      if (!name || !email || !password || !passwordRe) {
-        throw new Error("값을 모두 입력해라");
-      }
-      if (password !== passwordRe) {
-        throw new Error("입력한 비밀번호가 다름");
-      }
       const isExistUser = await this.usersRepository.findUserByEmail(email);
       if (isExistUser) {
         throw new Error("이미 존재하는 email 입니다");
       }
-      const sortPassword = await bcrypt.hash(password, 11);
+      const sortPassword = await bcrypt.hash(
+        password,
+        Number.parseInt(process.env.PASSWORD_HASH_SALT_ROUNDS)
+      );
       const createdUser = await this.usersRepository.createUser(
         name,
         email,
         sortPassword,
         description
       );
-
-      return createdUser;
+      const filterUser = {
+        userId: createdUser.userId,
+        name: createdUser.name,
+        email: createdUser.email,
+        description: createdUser.description,
+      };
+      return filterUser;
     } catch (error) {
       throw error;
     }
@@ -56,19 +58,25 @@ export class UsersService {
         { userId: isExistUser.userId },
         process.env.ACCESS_SECRET_KEY,
         {
-          expiresIn: "2h",
+          expiresIn: process.env.ACCESS_EXPIRATION_TIME,
         }
       );
       const refreshToken = jwt.sign(
         { userId: isExistUser.userId },
         process.env.REFRESH_SECRET_KEY,
         {
-          expiresIn: "2D",
+          expiresIn: process.env.REFRESH_EXPIRATION_TIME,
         }
       );
       res.cookie("accessToken", accessToken);
       res.cookie("refreshToken", refreshToken);
-      return isExistUser;
+      const filterUser = {
+        userId: isExistUser.userId,
+        name: isExistUser.name,
+        email: isExistUser.email,
+        description: isExistUser.description,
+      };
+      return filterUser;
     } catch (error) {
       throw error;
     }
@@ -84,46 +92,14 @@ export class UsersService {
     }
   };
   //   내정보 조회
-  findUserById = async (userId) => {
+  findUserById = async (res, userId) => {
     try {
-      const userData = await this.usersRepository.findUserById(userId);
-      if (!userData) {
-        throw new Error("뭔가잘못됬어");
-      }
-      return userData;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  //   내정보 수정
-  updateUser = async (res, name, email, description, password, userId) => {
-    try {
-      // email,password는 확인용이고 email,password 수정X
-      // 수정할부분은 나머지
-      // 수정페이지에서 default 값으로 db에저장되어있는 값으로 입력되어 있다고 가정
       const tokenId = res.locals.user;
-      if (!name || !email || !password) {
-        throw new Error("값을 모두 입력해라");
+      if (tokenId !== userId * 1) {
+        throw new Error("권한 없음");
       }
-      if (tokenId !== 1 * userId) {
-        throw new Error("수정할 권한이 없슴");
-      }
-      const findUserById = await this.usersRepository.findUserById(1 * userId);
-      if (!findUserById) {
-        throw new Error("존재하는 않는 email 입니다");
-      }
-      const isSame = await bcrypt.compare(password, findUserById.password);
-      if (!isSame) {
-        throw new Error("비밀번호가 틀렸습니다");
-      }
-
-      const editUser = await this.usersRepository.updateUser(
-        name,
-        description,
-        tokenId
-      );
-      return editUser;
+      const userData = await this.usersRepository.findUserById(userId);
+      return userData;
     } catch (error) {
       throw error;
     }
@@ -139,9 +115,9 @@ export class UsersService {
       if (tokenId !== 1 * userId) {
         throw new Error("수정할 권한이 없슴");
       }
-      const findUserById = await this.usersRepository.findUserById(1 * userId);
+      const findUserById = await this.usersRepository.findUserById(userId);
       if (!findUserById) {
-        throw new Error("존재하는 않는 email 입니다");
+        throw new Error("관리자 문의");
       }
       const isSame = await bcrypt.compare(password, findUserById.password);
       if (!isSame) {
@@ -152,7 +128,13 @@ export class UsersService {
       );
       res.clearCookie("accessToken");
       res.clearCookie("refreshToken");
-      return deleteUser;
+      const filterUser = {
+        userId: deleteUser.userId,
+        name: deleteUser.name,
+        email: deleteUser.email,
+        description: deleteUser.description,
+      };
+      return filterUser;
     } catch (error) {
       throw error;
     }

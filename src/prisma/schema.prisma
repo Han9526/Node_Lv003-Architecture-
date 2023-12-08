@@ -15,11 +15,11 @@ model Users {
   name        String   
   email       String   @unique
   password    String
-  description String?  @default("안녕하세요")
+  description String?  @default("\uc548\ub155\ud558\uc138\uc694")
   createdAt   DateTime @default(now())               @map("createdAt")
   updatedAt   DateTime @updatedAt @default(now())    @map("updatedAt")
   Posts       Posts[]
-  Comments    Comments[]
+  
   
   @@map("Users")
 }
@@ -35,21 +35,8 @@ model Posts {
   createdAt DateTime @default(now())               @map("createdAt")
   updatedAt DateTime @updatedAt @default(now())    @map("updatedAt")
   createdUser Users    @relation(fields: [createdId], references: [userId], onDelete:Cascade)
-  Comments  Comments[]
 
   @@map("Posts")
   
 }
 
-model Comments {
-  commentId Int      @id @default(autoincrement()) @map("commentId")
-  userId    Int      @map("userId")
-  postId    Int      @map("postId")
-  content   String
-  createdAt DateTime @default(now())               @map("createdAt")
-  updatedAt DateTime @updatedAt @default(now())    @map("updatedAt")
-  createdUser      Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  selectedPost      Posts    @relation(fields: [postId], references: [postId], onDelete: Cascade)
-
-  @@map("Comments")
-}

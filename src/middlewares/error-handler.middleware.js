@@ -43,13 +43,12 @@ export default function (error, req, res, next) {
     case "수정할 권한이 없슴":
       statusCode = 403;
       break;
+    case "권한 없음":
+      statusCode = 403;
+      break;
 
     case "등록된 게시판이 없습니다":
       statusCode = 404;
-      break;
-
-    case "값을 모두 입력해라 벨리":
-      statusCode = 222;
       break;
 
     default:

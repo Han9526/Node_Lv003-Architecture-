@@ -1,5 +1,3 @@
-// src/services/posts.service.js
-
 import { PostsRepository } from "../repositories/posts.repository.js";
 import { UsersRepository } from "../repositories/users.repository.js";
 import bcrypt from "bcrypt";
@@ -11,26 +9,30 @@ export class PostsService {
   usersRepository = new UsersRepository();
   // 게시판 전체 조회
   findAllPosts = async () => {
-    const posts = await this.postsRepository.findAllPosts();
-    if (!posts) {
-      throw new Error("등록된 게시판이 없습니다");
-    }
-    posts.sort((a, b) => {
-      return b.createdAt - a.createdAt;
-    });
+    try {
+      const posts = await this.postsRepository.findAllPosts();
+      if (!posts) {
+        throw new Error("등록된 게시판이 없습니다");
+      }
+      posts.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      });
 
-    return posts.map((post) => {
-      return {
-        postId: post.postId,
-        createdId: post.createdId,
-        createdUser: post.createdUser.name,
-        title: post.title,
-        content: post.content,
-        imgUrl: post.imgUrl,
-        petName: post.petName,
-        category: post.category,
-      };
-    });
+      return posts.map((post) => {
+        return {
+          postId: post.postId,
+          createdId: post.createdId,
+          createdUser: post.createdUser.name,
+          title: post.title,
+          content: post.content,
+          imgUrl: post.imgUrl,
+          petName: post.petName,
+          category: post.category,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 
   //   게시판 상세 조회
@@ -40,7 +42,17 @@ export class PostsService {
       if (!post) {
         throw new Error("등록된 게시판이 없습니다");
       }
-      return post;
+      const filerPost = {
+        postId: post.postId,
+        createdId: post.createdId,
+        createdUser: post.createdUser.name,
+        title: post.title,
+        content: post.content,
+        imgUrl: post.imgUrl,
+        petName: post.petName,
+        category: post.category,
+      };
+      return filerPost;
     } catch (error) {
       throw error;
     }
@@ -71,8 +83,6 @@ export class PostsService {
   //   게시판 생성
   createPost = async (res, title, content, imgUrl, petName, category) => {
     try {
-      // 저장소(Repository)에게 데이터를 요청합니다.
-      // access userId가져와야댐
       const tokenId = res.locals.user;
       const createdPost = await this.postsRepository.createPost(
         title,
@@ -83,9 +93,9 @@ export class PostsService {
         tokenId
       );
 
-      // 비즈니스 로직을 수행한 후 사용자에게 보여줄 데이터를 가공합니다.
       return {
         postId: createdPost.postId,
+        createdUser: createdPost.createdUser.name,
         title: createdPost.title,
         content: createdPost.content,
         imgUrl: createdPost.imgUrl,
@@ -135,6 +145,7 @@ export class PostsService {
 
       return {
         postId: updatedPost.postId,
+        createdUser: updatedPost.createdUser.name,
         title: updatedPost.title,
         content: updatedPost.content,
         petName: updatedPost.petName,
@@ -169,7 +180,13 @@ export class PostsService {
         postId,
         tokenId
       );
-      return { message: "성공적으로 삭제", message: deletedPost };
+      return {
+        postId: deletedPost.postId,
+        createdUser: deletedPost.createdUser.name,
+        title: deletedPost.title,
+        content: deletedPost.content,
+        petName: deletedPost.petName,
+      };
     } catch (error) {
       throw error;
     }

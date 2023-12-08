@@ -1,8 +1,5 @@
-// src/controllers/posts.controller.js
-
 import { UsersService } from "../services/users.service.js";
 
-// Post의 컨트롤러(Controller)역할을 하는 클래스
 export class UsersController {
   usersService = new UsersService();
 
@@ -41,34 +38,11 @@ export class UsersController {
   getUserById = async (req, res, next) => {
     try {
       const { userId } = req.params;
-      const userInfo = await this.usersService.findUserById(userId);
+
+      const userInfo = await this.usersService.findUserById(res, userId);
       return res
         .status(200)
         .json({ message: "성공적으로 내정보조회", userInfo: userInfo });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  //  내정보 수정
-  updateUser = async (req, res, next) => {
-    try {
-      const { name, email, description, password } = req.body;
-      const { userId } = req.params;
-
-      // 서비스 계층에 구현된 updatePost 로직을 실행합니다.
-      const updatedUser = await this.usersService.updateUser(
-        res,
-        name,
-        email,
-        description,
-        password,
-        userId
-      );
-
-      return res
-        .status(200)
-        .json({ message: "성공적으로 수정", updatedUser: updatedUser });
     } catch (error) {
       next(error);
     }

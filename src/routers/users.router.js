@@ -16,13 +16,7 @@ router.post("/signin", usersController.signIn);
 // 내정보 조회
 router.get("/auth/:userId", authMiddleware, usersController.getUserById);
 
-// 내정보 수정
-router.patch(
-  "/auth/:userId",
-  inputVaildateMiddleware,
-  authMiddleware,
-  usersController.updateUser
-);
+// 로그아웃
 router.post("/signout", authMiddleware, usersController.signOut);
 
 // 회원 탈퇴
