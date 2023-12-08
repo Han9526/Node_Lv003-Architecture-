@@ -2,7 +2,7 @@
 
 export default async function (req, res, next) {
    try {
-      const { name, email, password, passwordRe, description } = req.body;
+      const { name, email, password, passwordRe } = req.body;
       if (!name || !email || !password || !passwordRe) {
          throw new Error('입력값이 모두 필요합니다.');
       }
