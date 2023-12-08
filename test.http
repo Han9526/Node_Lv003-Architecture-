@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "테스트",
-  "email": "test35@naver.com",
+  "email": "test36@naver.com",
   "password": "123123",
   "passwordRe": "123123"
 
@@ -16,7 +16,7 @@ POST http://localhost:3018/api/signin HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test35@naver.com",
+  "email": "test36@naver.com",
   "password": "123123"
 }
 
@@ -25,7 +25,7 @@ POST http://localhost:3018/api/signout HTTP/1.1
 Content-Type: application/json
 
 ### 회원탈퇴
-DELETE http://localhost:3018/api/auth/34 HTTP/1.1
+DELETE http://localhost:3018/api/auth/37 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 }
 
 ### 내정보 조회
-GET http://localhost:3018/api/auth/23 HTTP/1.1
+GET http://localhost:3018/api/auth/37 HTTP/1.1
 Content-Type: application/json
 
 
@@ -59,11 +59,12 @@ Content-Type: application/json
         "imgUrl":"example.com",
         "petName":"후추에요",
         "category":"cat"
+        
 }
 
 
 ### 게시판 수정
-PATCH http://localhost:3018/api/post/18 HTTP/1.1
+PATCH http://localhost:3018/api/post/19 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -75,7 +76,7 @@ Content-Type: application/json
 }
 
 ### 게시판 삭제
-DELETE http://localhost:3018/api/post/12 HTTP/1.1
+DELETE http://localhost:3018/api/post/19 HTTP/1.1
 Content-Type: application/json
 
 {
