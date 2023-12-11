@@ -1,7 +1,11 @@
 import { UsersService } from '../services/users.service.js';
 
 export class UsersController {
-   usersService = new UsersService();
+   // 생성자로 의존성 주입
+   constructor(usersService) {
+      this.usersService = usersService;
+   }
+   // usersService = new UsersService();
 
    // 회원가입
    signUp = async (req, res, next) => {

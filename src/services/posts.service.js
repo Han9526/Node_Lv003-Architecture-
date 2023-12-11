@@ -5,8 +5,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export class PostsService {
-   postsRepository = new PostsRepository();
-   usersRepository = new UsersRepository();
+   constructor(postsRepository, usersRepository) {
+      this.postsRepository = postsRepository;
+      this.usersRepository = usersRepository;
+   }
+   // postsRepository = new PostsRepository();
+   // usersRepository = new UsersRepository();
    // 게시판 전체 조회
    findAllPosts = async () => {
       const posts = await this.postsRepository.findAllPosts();

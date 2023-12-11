@@ -7,7 +7,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export class UsersService {
-   usersRepository = new UsersRepository();
+   // 생성자로 의존성 주입
+   constructor(usersRepository) {
+      this.usersRepository = usersRepository;
+   }
+   // usersRepository = new UsersRepository();
 
    // 회원가입
    createUser = async (name, email, password, description) => {
