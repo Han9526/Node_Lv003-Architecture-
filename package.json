@@ -1,7 +1,7 @@
 {
   "name": "016.-refreshtoken",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --forceExit",
